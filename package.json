@@ -1,0 +1,19 @@
+{
+  "name": "gra-react-utils",
+  "version": "1.0.44",
+  "description": "Utilities library",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "patch": "npm version patch && npm publish"
+  },
+  "repository": {
+    "type": "git",
+    "url": "gra-react-http"
+  },
+  "keywords": [
+    "http"
+  ],
+  "author": "",
+  "license": "ISC"
+}

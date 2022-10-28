@@ -1,6 +1,6 @@
 {
   "name": "gra-react-utils",
-  "version": "1.0.47",
+  "version": "1.0.48",
   "description": "Utilities library",
   "main": "index.js",
   "scripts": {

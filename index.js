@@ -258,7 +258,7 @@ export function useFormState(useState, defaultState) {
         required[name] = opts.required;
       }
       props = { ...props, ...opts };
-      console.log(props);
+      
     }
     return props;
   }

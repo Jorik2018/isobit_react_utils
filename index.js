@@ -245,7 +245,7 @@ export function useFormState(useState, defaultState) {
       name: name,
       onBlur: onfocusout,
       error: e[name],
-      value: v ?v: '',
+      value: v||v==0?v: '',
       onChange: handleChange
     }
     required[name] = true;

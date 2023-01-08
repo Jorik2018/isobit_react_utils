@@ -194,6 +194,7 @@ export function useFormState(useState, defaultState) {
   const [onBlur, setOnBlur] = useState({});
 
   const handleChange = (name, v) => {
+    console.log(name);
     if (name.target) {
       v = name;
       name = name.target.name || name.target.id;

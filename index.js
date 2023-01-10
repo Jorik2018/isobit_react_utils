@@ -145,7 +145,7 @@ function handleResponse(response) {
         if (text) {
           text = JSON.parse(text);
           if (response.gql) {
-            console.log(text);
+            //console.log(text);
             if (text.errors) {
               response.error = text.errors.reduce(
                 (previousValue, v) => (previousValue + '\n' + v.path.join('.') + ': ' + v.message).trim(),
@@ -176,7 +176,7 @@ function handleResponse(response) {
 function handleError(error, response) {
   
   if (http.loadingMask){
-    console.log('error from gra_utils ');
+    //console.log('error from gra_utils ');
     http.loadingMask(false);
   }
   response.error = error;
@@ -194,17 +194,14 @@ export function useFormState(useState, defaultState) {
   const [onBlur, setOnBlur] = useState({});
 
   const handleChange = (name, v) => {
-    console.log(name);
+    /*console.log(name);*/
     if (name.target) {
       v = name;
       name = name.target.name || name.target.id;
     }
     var vv = v && v.target ? (v.target.type === 'checkbox' ? v.target.checked : v.target.value) : v;
-
     setValue(o, name, vv);
-
-    setO(o => (
-{...o}
+    setO(o => ({...o}
       /*{
       ...o, [name]: vv ?? ''
     }*/

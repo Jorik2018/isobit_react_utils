@@ -73,11 +73,20 @@ function gql(url, body, header) {
 }
 
 function post(url, body, header) {
+
+
   const options = {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', ...authHeader(url, header) },
     body: (typeof body === 'string' || body instanceof String)?body:JSON.stringify(body)
   };
+  if(body instanceof FormData){
+    options = {
+      method: 'POST',
+      headers: { 'Content-Type': 'multipart/form-data', ...authHeader(url, header) },
+      body: body
+    }
+  }
   if (http.loadingMask) http.loadingMask(true);
   return fetch(scheme(url), options).then(handleResponse).catch((e) => { handleError(e, { url, ...options }) });
 }
@@ -192,11 +201,14 @@ export function useFormState(useState, defaultState) {
   const [e, setE] = useState({});
   const [required, setRequired] = useState({});
   const [onBlur, setOnBlur] = useState({});
+  const [onChange, setOnChange] = useState({});
 
   const handleChange = (name, v) => {
     /*console.log(name);*/
+    var ee;
     if (name.target) {
       v = name;
+      ee=name;
       name = name.target.name || name.target.id;
     }
     var vv = v && v.target ? (v.target.type === 'checkbox' ? v.target.checked : v.target.value) : v;
@@ -206,7 +218,7 @@ export function useFormState(useState, defaultState) {
       ...o, [name]: vv ?? ''
     }*/
     ));
-
+    if (onChange[name]&&ee)onChange[name](ee);
     if (required[name])
       setE(e => ({
         ...e, [name]: !vv
@@ -251,6 +263,10 @@ export function useFormState(useState, defaultState) {
       if ('onBlur' in opts) {
         onBlur[name] = opts.onBlur;
         delete opts.onBlur;
+      }
+      if ('onChange' in opts) {
+        onChange[name] = opts.onChange;
+        delete opts.onChange;
       }
       if ('required' in opts) {
         required[name] = opts.required;

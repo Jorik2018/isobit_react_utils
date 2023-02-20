@@ -83,7 +83,7 @@ function post(url, body, header) {
   if(body instanceof FormData){
     options = {
       method: 'POST',
-      headers: { 'Content-Type': 'multipart/form-data', ...authHeader(url, header) },
+      headers: { ...{}, ...authHeader(url, header) },
       body: body
     };
   }

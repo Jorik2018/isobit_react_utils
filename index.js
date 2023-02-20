@@ -85,7 +85,7 @@ function post(url, body, header) {
       method: 'POST',
       headers: { 'Content-Type': 'multipart/form-data', ...authHeader(url, header) },
       body: body
-    }
+    };
   }
   if (http.loadingMask) http.loadingMask(true);
   return fetch(scheme(url), options).then(handleResponse).catch((e) => { handleError(e, { url, ...options }) });

@@ -75,7 +75,7 @@ function gql(url, body, header) {
 function post(url, body, header) {
 
 
-  const options = {
+  let options = {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', ...authHeader(url, header) },
     body: (typeof body === 'string' || body instanceof String)?body:JSON.stringify(body)

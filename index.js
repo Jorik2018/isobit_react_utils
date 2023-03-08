@@ -184,7 +184,8 @@ console.log('response.status'+response.status);
 }
 
 function handleError(error, response) {
-  
+  console.log(response);
+  console.log('handleError.status'+response.status);
   if (http.loadingMask){
     //console.log('error from gra_utils ');
     http.loadingMask(false);

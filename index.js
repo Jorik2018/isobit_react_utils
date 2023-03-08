@@ -55,7 +55,23 @@ function get(url, header) {
     headers: { 'Content-Type': 'application/json', ...authHeader(url, header) },
   };
   if (http.loadingMask) http.loadingMask(true);
-  return fetch(scheme(url), options).then(handleResponse).catch((e) => { handleError(e, { url, ...options }) });
+
+  const myPromise = new Promise(async (resolve, reject) => {
+    let res;
+    try{
+      res=await fetch(scheme(url), options);
+      
+    }catch(e){
+      res=res||{};
+      res.error=e;
+    }
+    handleResponse(res);
+  });
+return myPromise;
+
+
+
+  //return fetch(scheme(url), options).then(handleResponse).catch((e) => { handleError(e, { url, ...options }) });
 }
 
 function gql(url, body, header) {

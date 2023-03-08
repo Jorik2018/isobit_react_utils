@@ -136,7 +136,8 @@ function handleResponse(response) {
     if (!response.ok) {
       const data = text;
       const accountService = http.accountService;
-
+      console.log(response);
+console.log('response.status'+response.status);
       if ([401].includes(response.status) /*&& http.accountService.getUserValue()*/) {
         if (accountService)
           accountService.logout();

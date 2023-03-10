@@ -55,7 +55,7 @@ function get(url, header) {
     headers: { 'Content-Type': 'application/json', ...authHeader(url, header) },
   };
   if (http.loadingMask) http.loadingMask(true);
-
+/*
   const myPromise = new Promise(async (resolve, reject) => {
     let res;
     try{
@@ -65,13 +65,13 @@ function get(url, header) {
       res=res||{};
       res.error=e;
     }
-    handleResponse(res);
+    resolve(res);
   });
 return myPromise;
+*/
 
 
-
-  //return fetch(scheme(url), options).then(handleResponse).catch((e) => { handleError(e, { url, ...options }) });
+  return fetch(scheme(url), options).then(handleResponse).catch((e) => { handleError(e, { url, ...options }) });
 }
 
 function gql(url, body, header) {
@@ -114,7 +114,7 @@ function put(url, body) {
     body: JSON.stringify(body)
   };
   if (http.loadingMask) http.loadingMask(true);
-  return fetch(http.baseURL + url, options).then(handleResponse).catch((e) => { handleError(e, { url, ...options }) });
+  return fetch(scheme(url), options).then(handleResponse).catch((e) => { handleError(e, { url, ...options }) });
 }
 
 // prefixed with underscored because delete is a reserved word in javascript
@@ -124,7 +124,7 @@ function _delete(url) {
     headers: authHeader(url)
   };
   if (http.loadingMask) http.loadingMask(true);
-  return fetch(http.baseURL + url, options).then(handleResponse).catch((e) => { handleError(e, { url, ...options }) });
+  return fetch(scheme(url), options).then(handleResponse).catch((e) => { handleError(e, { url, ...options }) });
 }
 
 // helper functions

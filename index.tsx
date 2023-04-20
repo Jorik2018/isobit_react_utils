@@ -1,10 +1,10 @@
 import React from 'react';
-import { useState, useEffect, Component} from 'react';
+import { useState, useEffect, Component,ComponentType} from 'react';
 
 var loadingMask;
 //https://bugfender.com/blog/how-to-create-an-npm-package/
 
-export function isObject(item) {
+export function isObject(item:any) {
   return (item && typeof item === 'object' && !Array.isArray(item));
 }
 
@@ -13,7 +13,7 @@ export function isObject(item) {
  * @param target
  * @param ...sources
  */
-export function mergeDeep(target, ...sources) {
+export function mergeDeep(target:any, ...sources:any):any {
   if (!sources.length) return target;
   const source = sources.shift();
 
@@ -31,7 +31,7 @@ export function mergeDeep(target, ...sources) {
   return mergeDeep(target, ...sources);
 }
 
-export const http = {
+export const http:any = {
   accountService: null,
   get,
   post,
@@ -44,14 +44,14 @@ export const http = {
   baseURL: 'http://web.regionancash.gob.pe'
 }
 
-function scheme(url) {
+function scheme(url:any) {
   if (!/^(f|ht)tps?:\/\//i.test(url)) {
     return http.baseURL + url;
   } else
     return url;
 }
 
-function get(url, header?:any) {
+function get(url:any, header?:any) {
   const options = {
     method: 'GET',
     headers: { 'Content-Type': 'application/json', ...authHeader(url, header) },
@@ -76,24 +76,24 @@ return myPromise;
   return fetch(scheme(url), options).then(handleResponse).catch((e) => { handleError(e, { url, ...options }) });
 }
 
-function gql(url, body, header) {
+function gql(url:any, body:any, header?:any) {
   const options = {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', ...authHeader(url, header) },
     body: JSON.stringify(body)
   };
   if (http.loadingMask) http.loadingMask(true);
-  return fetch(scheme(url), options).then((response) => {
+  return fetch(scheme(url), options).then((response:any) => {
     response.gql = true;
     if (http.loadingMask) http.loadingMask(false);
     return handleResponse(response);
   }).catch((e) => { handleError(e, { url, ...options }) });
 }
 
-function post(url, body, header) {
+function post(url:any, body:any, header?:any) {
 
 
-  let options = {
+  let options:any = {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', ...authHeader(url, header) },
     body: (typeof body === 'string' || body instanceof String)?body:JSON.stringify(body)
@@ -109,7 +109,7 @@ function post(url, body, header) {
   return fetch(scheme(url), options).then(handleResponse).catch((e) => { handleError(e, { url, ...options }) });
 }
 
-function put(url, body) {
+function put(url:any, body:any) {
   const options = {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json', ...authHeader(url) },
@@ -120,7 +120,7 @@ function put(url, body) {
 }
 
 // prefixed with underscored because delete is a reserved word in javascript
-function _delete(url) {
+function _delete(url:any) {
   const options = {
     method: 'DELETE',
     headers: authHeader(url)
@@ -129,13 +129,13 @@ function _delete(url) {
   return fetch(scheme(url), options).then(handleResponse).catch((e) => { handleError(e, { url, ...options }) });
 }
 
-function authHeader(url, opts) {
+function authHeader(url:any, opts?:any) {
   const accountService = http.accountService;
+  var header:any = {};
   if (accountService) {
     const user = accountService.getUserValue();
     const isLoggedIn = user && user.jwtToken;
     //const isApiUrl = url.startsWith(config.apiUrl);
-    var header = {};
     if (isLoggedIn /*&& isApiUrl*/)
       header.Authorization = `Bearer ${user.jwtToken}`;
   }
@@ -145,8 +145,8 @@ function authHeader(url, opts) {
   return header;
 }
 
-function handleResponse(response) {
-  return response.text().then(text => {
+function handleResponse(response:any) {
+  return response.text().then((text:any) => {
     if (http.loadingMask) http.loadingMask(false);
     if (!response.ok) {
       const data = text;
@@ -173,7 +173,7 @@ console.log('response.status'+response.status);
             //console.log(text);
             if (text.errors) {
               response.error = text.errors.reduce(
-                (previousValue, v) => (previousValue + '\n' + v.path.join('.') + ': ' + v.message).trim(),
+                (previousValue:any, v:any) => (previousValue + '\n' + v.path.join('.') + ': ' + v.message).trim(),
                 ''
               );
               //throw response.error;
@@ -198,7 +198,7 @@ console.log('response.status'+response.status);
   });
 }
 
-function handleError(error, response) {
+function handleError(error:any, response:any) {
   console.log(response);
   console.log('handleError.status'+response.status);
   if (http.loadingMask){
@@ -213,14 +213,14 @@ function handleError(error, response) {
     return Promise.reject(response);
 }
 
-export function useFormState(useState, defaultState) {
+export function useFormState(useState:any, defaultState?:any) {
   const [o, setO] = useState(defaultState ? defaultState : {});
   const [e, setE] = useState({});
   const [required, setRequired] = useState({});
   const [onBlur, setOnBlur] = useState({});
   const [onChange, setOnChange] = useState({});
 
-  const handleChange = (name, v) => {
+  const handleChange = (name:any, v?:any) => {
     /*console.log(name);*/
     var ee;
     if (name.target) {
@@ -230,21 +230,21 @@ export function useFormState(useState, defaultState) {
     }
     var vv = v && v.target ? (v.target.type === 'checkbox' ? v.target.checked : v.target.value) : v;
     setValue(o, name, vv);
-    setO(o => ({...o}
+    setO((o:any) => ({...o}
       /*{
       ...o, [name]: vv ?? ''
     }*/
     ));
     if (onChange[name]&&ee)onChange[name](ee);
     if (required[name])
-      setE(e => ({
+      setE((e:any) => ({
         ...e, [name]: !vv
       }));
   };
 
 
-  function setValue(o, k, v) {
-    k.split('.').forEach((k, i, a) => {
+  function setValue(o:any, k:any, v:any) {
+    k.split('.').forEach((k:any, i:any, a:any) => {
       if (i == a.length - 1) {
         o[k] = v;
       } else {
@@ -253,20 +253,20 @@ export function useFormState(useState, defaultState) {
     })
   }
 
-  const onfocusout = (e) => {
+  const onfocusout = (e:any) => {
     const el = e.target;
     const ob=onBlur[el.name];
     
     if (required[el.name] || el.required)
-      setE(e => ({
+      setE((e:any) => ({
         ...e, [el.name]: !el.value
       }));
     if(ob)ob(e);
   };
 
-  const defaultProps = function (name, opts) {
+  const defaultProps = function (name:any, opts?:any) {
 
-    let v=name.split('.').reduce((o,e)=>(o?o[e]:null),o);
+    let v=name.split('.').reduce((o:any,e:any)=>(o?o[e]:null),o);
 
     let props = {
       name: name,
@@ -294,7 +294,7 @@ export function useFormState(useState, defaultState) {
     return props;
   }
 
-  const bindEvents = function (form) {
+  const bindEvents = function (form:any) {
     var list = form.querySelectorAll("input");
     for (let item of list) {
       item.addEventListener('focusout', onfocusout);
@@ -308,10 +308,10 @@ export function useFormState(useState, defaultState) {
     }
   }
 
-  const validate = function (form) {
+  const validate = function (form:any) {
     let ok = true;
     let list = form.querySelectorAll("input,textarea");
-    let radio = {};
+    let radio:any = {};
     for (let item of list) {
       if (required[item.name] || item.required) {
         if (item.type == 'radio') {
@@ -319,7 +319,7 @@ export function useFormState(useState, defaultState) {
           //console.log(item.name+' '+item.parentNode);
           radio[item.name] = radio[item.name] || item.checked;
         } else if (!item.value) {
-          setE(e => ({
+          setE((e:any) => ({
             ...e, [item.name]: !item.value
           }));
           ok = false;
@@ -327,7 +327,7 @@ export function useFormState(useState, defaultState) {
       }
     }
     for (const [key, value] of Object.entries(radio)) {
-      setE(e => ({
+      setE((e:any) => ({
         ...e, [key]: !value
       }));
       if (!value) ok = false;
@@ -341,18 +341,19 @@ export function useFormState(useState, defaultState) {
   ];
 }
 
-export function debounce(fn, ms) {
-  let timer
-  return _ => {
+export function debounce(fn:any, ms?:any) {
+  let timer:any
+  return (_:any)=>{
+    /*let me:any=this;
     clearTimeout(timer)
-    timer = setTimeout(_ => {
+    timer = setTimeout((_:any) => {
       timer = null;
-      fn.apply(this, [window.innerWidth, window.innerHeight])
-    }, ms ? ms : 200)
+      fn.apply(me, [window.innerWidth, window.innerHeight])
+    }, ms ? ms : 200)*/
   };
 }
 
-export function useResize(React) {
+export function useResize(React:any) {
   // Initialize state with undefined width/height so server and client renders match
   // Learn more here: https://joshwcomeau.com/react/the-perils-of-rehydration/
   const [windowSize, setWindowSize] = React.useState({
@@ -383,7 +384,8 @@ export function useToken() {
 
   const getToken = () => {
     const tokenString = localStorage.getItem('token');
-    const userToken = JSON.parse(tokenString);
+    if(!tokenString)return tokenString;
+    const userToken:any = JSON.parse(tokenString);
     return userToken?.token
   };
 
@@ -403,7 +405,7 @@ export function useToken() {
 
   const [token, setToken0] = useState(getToken());
 
-  const setToken = userToken => {
+  const setToken = (userToken:any) => {
     localStorage.setItem('session', JSON.stringify(userToken));
     setToken0(userToken.token);
   };
@@ -416,7 +418,7 @@ export function useToken() {
 
 }
 
-export const OAuth = function ({setToken , url , redirect, client_id, oauth_url}) {
+export const OAuth = function ({setToken , url, redirect, client_id, oauth_url}:any) {
 
   const [msg, setMsg] = useState('');
 
@@ -434,7 +436,7 @@ export const OAuth = function ({setToken , url , redirect, client_id, oauth_url}
     const code = urlParams.get('code');
     console.log('useEffect',location);
     if (code){
-      http.post('/api/auth/token', code,()=>{return {'Content-Type':'*/*'}}).then((data) => {
+      http.post('/api/auth/token', code,()=>{return {'Content-Type':'*/*'}}).then((data:any) => {
        if (data.error) {
           setMsg(JSON.stringify(data.error));
         } else if (data.access_token||data.token) {
@@ -458,37 +460,55 @@ export const OAuth = function ({setToken , url , redirect, client_id, oauth_url}
 
 };
 
-export function lazyLoader(importComp){
-  
-  /*const C = this.state?.component;
+interface LazyLoaderState {
+  component: ComponentType<any> | null;
+}
 
-  const [component,useComponent]=useState(null);
-
-
-  useEffect(() => {
-    importComp().then((comp) => this.setState({ component: comp.default }));
-  }, []);
-
-  return C ? <C {...this.props} /> :<div style={{height:'100%',display:'flex',
-  flexDirection: 'column',
-  justifyContent: 'center'}}>Loading...</div>;*/
+export function lazyLoader(importComp:any){
 
 	return class extends Component {
 
-		state: {
-      component: null;
-    } | undefined;
+    state: LazyLoaderState = {
+      component: null,
+    };
+
+    /*constructor(props: any) {
+      super(props);
+      this.state = {
+        component: null,
+      };
+    }*/
 
 		//loading the component and setting it to state
 		componentDidMount() {
-			importComp().then((comp) => this.setState({ component: comp.default }));
+			importComp().then((comp:any) => this.setState({ component: comp.default }));
 		}
     
 		render() {
-			const C:any = this.state?.component;
+			const C:any = this.state.component;
 			return C ? <C {...this.props} /> :<div style={{height:'100%',display:'flex',
 			flexDirection: 'column',
 			justifyContent: 'center'}}>Loading...</div>;
 		}
 	};
 };
+
+/*
+const lazyLoader = (importComp: () => Promise<{ default: ComponentType<any> }>) => {
+  return function LazyLoader(props: any) {
+    const [component, setComponent] = useState<ComponentType<any> | null>(null);
+
+    //loading the component and setting it to state
+    useEffect(() => {
+      importComp().then((comp) => setComponent(comp.default));
+    }, []);
+
+    //rendering the component
+    if (!component) return null;
+    const C = component;
+    return <C {...props} />;
+  };
+};
+
+export default lazyLoader;
+*/

@@ -442,9 +442,8 @@ export const OAuth = function ({setToken , url, redirect, client_id, oauth_url}:
        if (data.error) {
           setMsg(JSON.stringify(data.error));
         } else if (data.access_token||data.token) {
-          localStorage.setItem('perms',JSON.stringify(data.perms));
           localStorage.setItem('user_nicename',data.user_nicename);
-          setToken({ token: data.access_token||data.token });
+          setToken({ perms:data.perms,token: data.access_token||data.token });
           location = new URL(window.location.toString());
           urlParams = new URLSearchParams(location.search);
           urlParams.delete('code');

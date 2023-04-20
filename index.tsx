@@ -383,10 +383,12 @@ export function useResize(React:any) {
 export function useToken() {
 
   const getToken = () => {
-    const tokenString = localStorage.getItem('token');
+    const tokenString = localStorage.getItem('session');
     if(!tokenString)return tokenString;
+    try{
     const userToken:any = JSON.parse(tokenString);
     return userToken?.token
+    }catch(e:any){return null;}
   };
 
   const logOut = () => {

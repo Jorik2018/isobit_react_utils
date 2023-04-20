@@ -388,6 +388,7 @@ export function useToken() {
   };
 
   const logOut = () => {
+    localStorage.removeItem('session');
     localStorage.removeItem('token');
     localStorage.removeItem('perms');
     setToken(null);
@@ -403,7 +404,7 @@ export function useToken() {
   const [token, setToken0] = useState(getToken());
 
   const setToken = userToken => {
-    localStorage.setItem('token', JSON.stringify(userToken));
+    localStorage.setItem('session', JSON.stringify(userToken));
     setToken0(userToken.token);
   };
 

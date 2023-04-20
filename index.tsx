@@ -51,7 +51,7 @@ function scheme(url) {
     return url;
 }
 
-function get(url, header) {
+function get(url, header?:any) {
   const options = {
     method: 'GET',
     headers: { 'Content-Type': 'application/json', ...authHeader(url, header) },

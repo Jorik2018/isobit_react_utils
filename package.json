@@ -15,5 +15,10 @@
     "http,form"
   ],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "@types/react": "^18.0.37",
+    "react": "^18.2.0",
+    "typescript": "^5.0.4"
+  }
 }

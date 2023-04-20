@@ -408,8 +408,13 @@ export function useToken() {
   const [token, setToken0] = useState(getToken());
 
   const setToken = (userToken:any) => {
-    localStorage.setItem('session', JSON.stringify(userToken));
-    setToken0(userToken.token);
+    if(userToken){
+      localStorage.setItem('session', JSON.stringify(userToken));
+      setToken0(userToken.token);
+    }else{
+      localStorage.removeItem('session');
+      setToken0(null);
+    }
   };
 
   return {

@@ -2,7 +2,6 @@ import React from 'react';
 import { useState, useEffect, Component,ComponentType} from 'react';
 
 var loadingMask;
-//https://bugfender.com/blog/how-to-create-an-npm-package/
 
 export function isObject(item:any) {
   return (item && typeof item === 'object' && !Array.isArray(item));

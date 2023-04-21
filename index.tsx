@@ -1,4 +1,3 @@
-import React from 'react';
 import { useState, useEffect, Component,ComponentType} from 'react';
 
 let loadingMask;
@@ -7,11 +6,6 @@ function isObject(item:any) {
   return (item && typeof item === 'object' && !Array.isArray(item));
 }
 
-/**
- * Deep merge two objects.
- * @param target
- * @param ...sources
- */
 export function mergeDeep(target:any, ...sources:any):any {
   if (!sources.length) return target;
   const source = sources.shift();
@@ -38,7 +32,7 @@ export const http:any = {
   put,
   loadingMask,
   delete: _delete,
-  onError:(request:any)=>{},
+  onError:(request:any)=>{console.log(request)},
   baseHREF: '/admin/pide',
   baseURL: 'http://web.regionancash.gob.pe'
 }
@@ -129,6 +123,7 @@ function _delete(url:any) {
 }
 
 function authHeader(url:any, opts?:any) {
+  console.log(url);
   const accountService = http.accountService;
   var header:any = {};
   if (accountService) {
@@ -215,9 +210,9 @@ function handleError(error:any, response:any) {
 export function useFormState(useState:any, defaultState?:any) {
   const [o, setO] = useState(defaultState ? defaultState : {});
   const [e, setE] = useState({});
-  const [required, setRequired] = useState({});
-  const [onBlur, setOnBlur] = useState({});
-  const [onChange, setOnChange] = useState({});
+  const [required/*, setRequired*/] = useState({});
+  const [onBlur/*, setOnBlur*/] = useState({});
+const [onChange/*, setOnChange*/] = useState({});
 
   const handleChange = (name:any, v?:any) => {
     /*console.log(name);*/
@@ -340,43 +335,31 @@ export function useFormState(useState:any, defaultState?:any) {
   ];
 }
 
-export function debounce(fn:any, ms?:any) {
-  let timer:any
-  return (_:any)=>{
-    /*let me:any=this;
-    clearTimeout(timer)
-    timer = setTimeout((_:any) => {
-      timer = null;
-      fn.apply(me, [window.innerWidth, window.innerHeight])
-    }, ms ? ms : 200)*/
-  };
-}
-
-export function useResize(React:any) {
-  // Initialize state with undefined width/height so server and client renders match
-  // Learn more here: https://joshwcomeau.com/react/the-perils-of-rehydration/
-  const [windowSize, setWindowSize] = React.useState({
+export function useResize(name?:any) {
+  console.log(name);
+  const [size, setSize] = useState({
     width: undefined,
     height: undefined,
   });
-  React.useEffect(() => {
-    // Handler to call on window resize
+  let element=window;
+  useEffect(() => {
     function handleResize() {
-      // Set window width/height to state
-      if (windowSize.width != window.innerWidth || windowSize.height != window.innerHeight)
-        setWindowSize({
+      if (size.width != element.innerWidth || size.height != element.innerHeight){
+        setSize({
           width: window.innerWidth,
           height: window.innerHeight,
         });
+      }
     }
-    // Add event listener
-    window.addEventListener("resize", handleResize);
-    // Call handler right away so state gets updated with initial window size
-    handleResize();
-    // Remove event listener on cleanup
-    return () => window.removeEventListener("resize", handleResize);
-  }, []); // Empty array ensures that effect is only run on mount
-  return windowSize;
+    element.addEventListener("resize", handleResize);
+    
+    //setTimeout(() => {
+      handleResize();
+      //fn.apply(me, [window.innerWidth, window.innerHeight])
+    //}, 200)
+    return () => element.removeEventListener("resize", handleResize);
+  }, []);
+  return size;
 }
 
 export function useToken() {

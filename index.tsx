@@ -1,7 +1,7 @@
 import React from 'react';
 import { useState, useEffect, Component,ComponentType} from 'react';
 
-var loadingMask;
+let loadingMask;
 
 function isObject(item:any) {
   return (item && typeof item === 'object' && !Array.isArray(item));

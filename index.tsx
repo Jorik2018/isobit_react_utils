@@ -3,7 +3,7 @@ import { useState, useEffect, Component,ComponentType} from 'react';
 
 var loadingMask;
 
-export function isObject(item:any) {
+function isObject(item:any) {
   return (item && typeof item === 'object' && !Array.isArray(item));
 }
 

@@ -335,30 +335,39 @@ const [onChange/*, setOnChange*/] = useState({});
   ];
 }
 
-export function useResize(name?:any) {
-  console.log(name);
-  const [size, setSize] = useState({
+export function useResize(fn?:any,name?:any) {
+  /*const [size, setSize] = useState({
     width: undefined,
     height: undefined,
-  });
-  let element=window;
+  });*/
+  const size=[null,null];
   useEffect(() => {
-    function handleResize() {
-      if (size.width != element.innerWidth || size.height != element.innerHeight){
-        setSize({
-          width: window.innerWidth,
-          height: window.innerHeight,
-        });
+    if(name&&!name.current)return;
+    let eventName=name?"parentResize":"resize";
+    let element=(name&&name.current)||window;
+//    console.log(eventName);
+//    console.log(element);
+    function handleResize(e) {
+      let w=e.width||element.innerWidth;
+      let h=e.height||element.innerHeight;
+      //console.log(eventName+ " w="+w+ ", h="+h);
+      if (size[0] != w || size[1] != element.h){
+        if(fn){
+          fn({
+            width: w,
+            height: h,
+          })
+        }
+        size[0]=w;
+        size[1]=h;
       }
     }
-    element.addEventListener("resize", handleResize);
-    
-    //setTimeout(() => {
-      handleResize();
-      //fn.apply(me, [window.innerWidth, window.innerHeight])
-    //}, 200)
-    return () => element.removeEventListener("resize", handleResize);
-  }, []);
+    element.addEventListener(eventName, handleResize);
+    window.dispatchEvent(new Event('resize'));
+    return () => {
+      element.removeEventListener(eventName, handleResize)
+    };
+  }, name?[name]:[]);
   return size;
 }
 

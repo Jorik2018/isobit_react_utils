@@ -149,7 +149,7 @@ function handleResponse(response:any) {
 console.log('response.status'+response.status);
       if ([401].includes(response.status) /*&& http.accountService.getUserValue()*/) {
         if (accountService)
-          accountService.logout();
+          accountService.logOut();
       } else if (response.status == 403) {
         alert('No esta autorizado!');
       }
